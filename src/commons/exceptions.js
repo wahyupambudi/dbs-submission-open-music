@@ -13,6 +13,13 @@ class NotFoundError extends ClientError {
   }
 }
 
+class InvariantError extends ClientError {
+  constructor(message) {
+    super(message, 400);
+    this.name = 'InvariantError';
+  }
+}
+
 /**
  * 5. @TODO
  *

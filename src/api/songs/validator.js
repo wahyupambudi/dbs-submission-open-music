@@ -19,6 +19,7 @@ const SongsValidator = {
      *
      * referensi: https://www.dicoding.com/academies/271/tutorials/14467
      */
+    const result = scheme.validate(payload);
 
     if (result.error) {
       throw new InvariantError(result.error.message);

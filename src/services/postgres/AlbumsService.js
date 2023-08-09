@@ -18,6 +18,11 @@ class AlbumsService {
      * referensi: https://www.dicoding.com/academies/271/tutorials/17476
      */
 
+    const query = {
+      text: "INSERT INTO albums VALUES ($1, $2, $3)",
+      values: [id, name, year]
+    }
+
     await this._pool.query(query);
 
     return id;

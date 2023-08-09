@@ -78,6 +78,7 @@ class SongsService {
        * 6. @TODO
        * `throw` error instance dari NotFoundError dengan pesan 'songs is not found'
        */
+      throw new NotFoundError('songs is not found')
     }
   }
 }
