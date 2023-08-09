@@ -10,6 +10,22 @@ exports.up = (pgm) => {
    *  Catatan: referensi modul Dicoding: https://www.dicoding.com/academies/271/tutorials/17468
    */
 
+  pgm.createTable('albums', {
+    id: {
+      type: "VARCHAR(50)",
+      primaryKey : true,
+      notNull: true,
+    },
+    name: {
+      type: 'VARCHAR(100)',
+      notNull: true,
+    },
+    year: {
+      type: 'INT',
+      notNull: true,
+    },
+  })
+
 };
 
 exports.down = (pgm) => {

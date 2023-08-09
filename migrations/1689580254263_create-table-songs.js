@@ -39,4 +39,7 @@ exports.down = (pgm) => {
    *
    * Catatan: referensi modul Dicoding: https://www.dicoding.com/academies/271/tutorials/17468
    */
+  
+  pgm.dropTable('songs');
+
 };
