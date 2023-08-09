@@ -30,12 +30,12 @@ class SongsHandler {
 
   async getSongByIdHandler(request) {
     const { id } = request.params;
-    const song = await this._songsService.getSongById(id);
+    const songs = await this._songsService.getSongById(id);
 
     return {
       status: 'success',
       data: {
-        song,
+        songs,
       },
     };
   }
