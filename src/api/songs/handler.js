@@ -8,7 +8,7 @@ class SongsHandler {
     const payload = this._validator.validatePostSongPayload(request.payload);
     const songId = await this._songsService.persistSongs(payload);
     const response = h.response({
-      status: 'success',
+      status: "success",
       data: {
         songId,
       },
@@ -21,7 +21,7 @@ class SongsHandler {
     const songs = await this._songsService.getSongs();
 
     return {
-      status: 'success',
+      status: "success",
       data: {
         songs,
       },
@@ -30,12 +30,12 @@ class SongsHandler {
 
   async getSongByIdHandler(request) {
     const { id } = request.params;
-    const songs = await this._songsService.getSongById(id);
+    const song = await this._songsService.getSongById(id);
 
     return {
-      status: 'success',
+      status: "success",
       data: {
-        songs,
+        song,
       },
     };
   }
@@ -47,8 +47,8 @@ class SongsHandler {
     await this._songsService.editSongById(id, payload);
 
     return {
-      status: 'success',
-      message: 'songs updated',
+      status: "success",
+      message: "songs updated",
     };
   }
 
@@ -58,8 +58,8 @@ class SongsHandler {
     await this._songsService.deleteSongById(id);
 
     return {
-      status: 'success',
-      message: 'song deleted',
+      status: "success",
+      message: "song deleted",
     };
   }
 }
