@@ -1,6 +1,6 @@
-const { nanoid } = require('nanoid');
-const { pool } = require('./pool');
-const { NotFoundError } = require('../../commons/exceptions');
+const { nanoid } = require("nanoid");
+const { pool } = require("./pool");
+const { NotFoundError } = require("../../commons/exceptions");
 
 class AlbumsService {
   constructor() {
@@ -20,8 +20,8 @@ class AlbumsService {
 
     const query = {
       text: "INSERT INTO albums VALUES ($1, $2, $3)",
-      values: [id, name, year]
-    }
+      values: [id, name, year],
+    };
 
     await this._pool.query(query);
 
@@ -30,42 +30,58 @@ class AlbumsService {
 
   async getAlbumById(id) {
     const query = {
-      text: 'SELECT id, name, year FROM albums WHERE id = $1',
+      text: "SELECT id, name, year FROM albums WHERE id = $1",
       values: [id],
     };
 
     const { rows } = await this._pool.query(query);
 
     if (!rows.length) {
-      throw new NotFoundError('Album tidak ditemukan', 404);
+      throw new NotFoundError("Album tidak ditemukan", 404);
     }
 
     return rows[0];
   }
 
+  // opsional
+  async getSongByAlbumId(id) {
+    const query = {
+      text: "SELECT * FROM songs WHERE album_id = $1",
+      values: [id],
+    };
+
+    const { rows } = await this._pool.query(query);
+
+    if (!rows.length) {
+      throw new NotFoundError("Album tidak ditemukan", 404);
+    }
+
+    return rows;
+  }
+
   async editAlbumById(id, { name, year }) {
     const query = {
-      text: 'UPDATE albums SET name = $1, year = $2 WHERE id = $3 RETURNING id',
+      text: "UPDATE albums SET name = $1, year = $2 WHERE id = $3 RETURNING id",
       values: [name, year, id],
     };
 
     const { rows } = await this._pool.query(query);
 
     if (!rows.length) {
-      throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan');
+      throw new NotFoundError("Gagal memperbarui album. Id tidak ditemukan");
     }
   }
 
   async deleteAlbumById(id) {
     const query = {
-      text: 'DELETE FROM albums WHERE id = $1 RETURNING id',
+      text: "DELETE FROM albums WHERE id = $1 RETURNING id",
       values: [id],
     };
 
     const { rows } = await this._pool.query(query);
 
     if (!rows.length) {
-      throw new NotFoundError('Album gagal dihapus. Id tidak ditemukan');
+      throw new NotFoundError("Album gagal dihapus. Id tidak ditemukan");
     }
   }
 }

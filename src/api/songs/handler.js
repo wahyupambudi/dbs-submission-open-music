@@ -1,7 +1,11 @@
+const autoBind = require("auto-bind");
+
 class SongsHandler {
   constructor(validator, songsService) {
     this._validator = validator;
     this._songsService = songsService;
+
+    autoBind(this); // mem-bind nilai this untuk seluruh method sekaligus
   }
 
   async postSongHandler(request, h) {
