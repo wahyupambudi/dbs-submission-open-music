@@ -13,8 +13,8 @@ const config = {
   postgres: {
     host: process.env.PGHOST,
     port: process.env.PGPORT,
-    database: process.env.PGNAME,
-    username: process.env.PGUSERNAME,
+    database: process.env.PGDATABASE,
+    username: process.env.PGUSER,
     password: process.env.PGPASSWORD,
   },
 };
