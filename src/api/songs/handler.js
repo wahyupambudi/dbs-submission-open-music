@@ -1,18 +1,14 @@
-const autoBind = require("auto-bind");
-
 class SongsHandler {
   constructor(validator, songsService) {
     this._validator = validator;
     this._songsService = songsService;
-
-    autoBind(this); // mem-bind nilai this untuk seluruh method sekaligus
   }
 
   async postSongHandler(request, h) {
     const payload = this._validator.validatePostSongPayload(request.payload);
     const songId = await this._songsService.persistSongs(payload);
     const response = h.response({
-      status: "success",
+      status: 'success',
       data: {
         songId,
       },
@@ -25,7 +21,7 @@ class SongsHandler {
     const songs = await this._songsService.getSongs();
 
     return {
-      status: "success",
+      status: 'success',
       data: {
         songs,
       },
@@ -37,7 +33,7 @@ class SongsHandler {
     const song = await this._songsService.getSongById(id);
 
     return {
-      status: "success",
+      status: 'success',
       data: {
         song,
       },
@@ -51,8 +47,8 @@ class SongsHandler {
     await this._songsService.editSongById(id, payload);
 
     return {
-      status: "success",
-      message: "songs updated",
+      status: 'success',
+      message: 'songs updated',
     };
   }
 
@@ -62,8 +58,8 @@ class SongsHandler {
     await this._songsService.deleteSongById(id);
 
     return {
-      status: "success",
-      message: "song deleted",
+      status: 'success',
+      message: 'song deleted',
     };
   }
 }
