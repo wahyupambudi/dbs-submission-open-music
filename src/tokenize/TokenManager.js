@@ -1,6 +1,6 @@
-const Jwt = require('@hapi/jwt');
-const { config } = require('../commons/config');
-const { InvariantError } = require('../commons/exceptions');
+const Jwt = require("@hapi/jwt");
+const { config } = require("../commons/config");
+const { InvariantError } = require("../commons/exceptions");
 
 class TokenManager {
   constructor() {
@@ -17,6 +17,7 @@ class TokenManager {
      * Referensi: https://www.dicoding.com/academies/271/tutorials/17671
      */
 
+    return this._jwt.generate(payload, config.jwtToken.accessToken.key);
   }
 
   generateRefreshToken(payload) {
@@ -30,7 +31,7 @@ class TokenManager {
       const { payload } = artifacts.decoded;
       return payload;
     } catch (error) {
-      throw new InvariantError('refresh token tidak valid');
+      throw new InvariantError("refresh token tidak valid");
     }
   }
 }

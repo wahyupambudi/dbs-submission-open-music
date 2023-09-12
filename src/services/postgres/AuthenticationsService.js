@@ -1,4 +1,4 @@
-const { pool } = require('./pool');
+const { pool } = require("./pool");
 
 class AuthenticationsService {
   constructor() {
@@ -14,14 +14,18 @@ class AuthenticationsService {
      * Referensi: https://www.dicoding.com/academies/271/tutorials/17649
      */
 
-    const query = // ... isi query insert ke dalam tabel authentications
+    // const query = // ... isi query insert ke dalam tabel authentications
 
+    const query = {
+      text: "INSERT INTO authentications VALUES($1)",
+      values: [token],
+    };
     await this._pool.query(query);
   }
 
   async isRefreshTokenExists(refreshToken) {
     const query = {
-      text: 'SELECT refresh_token FROM authentications WHERE refresh_token = $1',
+      text: "SELECT refresh_token FROM authentications WHERE refresh_token = $1",
       values: [refreshToken],
     };
 
@@ -32,7 +36,7 @@ class AuthenticationsService {
 
   async deleteRefreshToken(refreshToken) {
     await this._pool.query({
-      text: 'DELETE FROM authentications WHERE refresh_token = $1',
+      text: "DELETE FROM authentications WHERE refresh_token = $1",
       values: [refreshToken],
     });
   }

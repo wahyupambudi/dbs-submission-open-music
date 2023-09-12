@@ -1,7 +1,4 @@
-const {
-  ForbiddenError,
-  NotFoundError,
-} = require('../../commons/exceptions');
+const { ForbiddenError, NotFoundError } = require("../../commons/exceptions");
 
 class PlaylistsHandler {
   constructor(validator, playlistsService) {
@@ -11,12 +8,17 @@ class PlaylistsHandler {
 
   async postPlaylistHandler(request, h) {
     const { userId: owner } = request.auth.credentials;
-    const { name } = this._validator.validatePostPlaylistPayload(request.payload);
+    const { name } = this._validator.validatePostPlaylistPayload(
+      request.payload,
+    );
 
-    const playlistId = await this._playlistsService.persistPlaylist({ name, owner });
+    const playlistId = await this._playlistsService.persistPlaylist({
+      name,
+      owner,
+    });
 
     const response = h.response({
-      status: 'success',
+      status: "success",
       data: {
         playlistId,
       },
@@ -27,11 +29,12 @@ class PlaylistsHandler {
   }
 
   async getPlaylistsHandler(request) {
-    const { userId } = // 5. @TODO dapatkan userId dari request.auth.credentials. Referensi: https://www.dicoding.com/academies/271/tutorials/17726?from=17724
+    // const { userId } = // 5. @TODO dapatkan userId dari request.auth.credentials. Referensi: https://www.dicoding.com/academies/271/tutorials/17726?from=17724
+    const { userId } = request.auth.credentials;
     const playlists = await this._playlistsService.getPlaylists(userId);
 
     return {
-      status: 'success',
+      status: "success",
       data: {
         playlists,
       },
@@ -40,26 +43,32 @@ class PlaylistsHandler {
 
   async postSongToPlaylistHandler(request, h) {
     const { playlistId } = request.params;
-    const { songId } = this._validator.validatePostPlaylistSongPayload(request.payload);
+    const { songId } = this._validator.validatePostPlaylistSongPayload(
+      request.payload,
+    );
     const { userId: owner } = request.auth.credentials;
 
-    const isOwnedPlaylist = await this._playlistsService.isPlaylistOwnedBy(playlistId, owner);
+    const isOwnedPlaylist = await this._playlistsService.isPlaylistOwnedBy(
+      playlistId,
+      owner,
+    );
 
     if (!isOwnedPlaylist) {
       // 6. @TODO `throw` error ForbiddenError bila playlist tidak dimiliki oleh owner
+      throw new ForbiddenError("Anda tidak berhak mengakses resource ini");
     }
 
     const isSongExist = await this._playlistsService.isSongExists(songId);
 
     if (!isSongExist) {
-      throw new NotFoundError('Lagu tidak ditemukan');
+      throw new NotFoundError("Lagu tidak ditemukan");
     }
 
     await this._playlistsService.addSongToPlaylist(playlistId, songId);
 
     const response = h.response({
-      status: 'success',
-      message: 'Lagu berhasil ditambahkan ke playlist',
+      status: "success",
+      message: "Lagu berhasil ditambahkan ke playlist",
     });
 
     response.code(201);
@@ -70,23 +79,28 @@ class PlaylistsHandler {
     const { playlistId } = request.params;
     const { userId: owner } = request.auth.credentials;
 
-    const isPlaylistExists = await this._playlistsService.isPlaylistExists(playlistId);
+    const isPlaylistExists = await this._playlistsService.isPlaylistExists(
+      playlistId,
+    );
 
     if (!isPlaylistExists) {
-      throw new NotFoundError('Playlist tidak ditemukan');
+      throw new NotFoundError("Playlist tidak ditemukan");
     }
 
-    const isOwnedPlaylist = await this._playlistsService.isPlaylistOwnedBy(playlistId, owner);
+    const isOwnedPlaylist = await this._playlistsService.isPlaylistOwnedBy(
+      playlistId,
+      owner,
+    );
 
     if (!isOwnedPlaylist) {
-      throw new ForbiddenError('Anda tidak berhak mengakses resource ini');
+      throw new ForbiddenError("Anda tidak berhak mengakses resource ini");
     }
 
     const playlist = await this._playlistsService.getPlaylistById(playlistId);
     const songs = await this._playlistsService.getSongsByPlaylistId(playlistId);
 
     return {
-      status: 'success',
+      status: "success",
       data: {
         playlist: {
           ...playlist,
@@ -98,20 +112,25 @@ class PlaylistsHandler {
 
   async deleteSongFromPlaylistHandler(request) {
     const { playlistId } = request.params;
-    const { songId } = this._validator.validatePostPlaylistSongPayload(request.payload);
+    const { songId } = this._validator.validatePostPlaylistSongPayload(
+      request.payload,
+    );
     const { userId: owner } = request.auth.credentials;
 
-    const isOwnedPlaylist = await this._playlistsService.isPlaylistOwnedBy(playlistId, owner);
+    const isOwnedPlaylist = await this._playlistsService.isPlaylistOwnedBy(
+      playlistId,
+      owner,
+    );
 
     if (!isOwnedPlaylist) {
-      throw new ForbiddenError('Anda tidak berhak mengakses resource ini');
+      throw new ForbiddenError("Anda tidak berhak mengakses resource ini");
     }
 
     await this._playlistsService.deleteSongFromPlaylist(playlistId, songId);
 
     return {
-      status: 'success',
-      message: 'Lagu berhasil dihapus dari playlist',
+      status: "success",
+      message: "Lagu berhasil dihapus dari playlist",
     };
   }
 
@@ -119,17 +138,20 @@ class PlaylistsHandler {
     const { playlistId } = request.params;
     const { userId: owner } = request.auth.credentials;
 
-    const isOwnedPlaylist = await this._playlistsService.isPlaylistOwnedBy(playlistId, owner);
+    const isOwnedPlaylist = await this._playlistsService.isPlaylistOwnedBy(
+      playlistId,
+      owner,
+    );
 
     if (!isOwnedPlaylist) {
-      throw new ForbiddenError('Anda tidak berhak mengakses resource ini');
+      throw new ForbiddenError("Anda tidak berhak mengakses resource ini");
     }
 
     await this._playlistsService.deletePlaylistById(playlistId);
 
     return {
-      status: 'success',
-      message: 'Lagu berhasil dihapus dari playlist',
+      status: "success",
+      message: "Lagu berhasil dihapus dari playlist",
     };
   }
 }

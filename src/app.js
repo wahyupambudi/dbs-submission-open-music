@@ -1,25 +1,25 @@
-const Hapi = require('@hapi/hapi');
-const Jwt = require('@hapi/jwt');
-const { ClientError } = require('./commons/exceptions');
-const { config } = require('./commons/config');
-const albums = require('./api/albums');
-const AlbumsService = require('./services/postgres/AlbumsService');
-const songs = require('./api/songs');
-const SongsService = require('./services/postgres/SongsService');
-const UsersService = require('./services/postgres/UsersService');
-const users = require('./api/users');
-const AuthenticationsService = require('./services/postgres/AuthenticationsService');
-const TokenManager = require('./tokenize/TokenManager');
-const authentications = require('./api/authentications');
-const PlaylistsService = require('./services/postgres/PlaylistsService');
-const playlists = require('./api/playlists');
+const Hapi = require("@hapi/hapi");
+const Jwt = require("@hapi/jwt");
+const { ClientError } = require("./commons/exceptions");
+const { config } = require("./commons/config");
+const albums = require("./api/albums");
+const AlbumsService = require("./services/postgres/AlbumsService");
+const songs = require("./api/songs");
+const SongsService = require("./services/postgres/SongsService");
+const UsersService = require("./services/postgres/UsersService");
+const users = require("./api/users");
+const AuthenticationsService = require("./services/postgres/AuthenticationsService");
+const TokenManager = require("./tokenize/TokenManager");
+const authentications = require("./api/authentications");
+const PlaylistsService = require("./services/postgres/PlaylistsService");
+const playlists = require("./api/playlists");
 
 async function createServer() {
   const server = Hapi.server({
     host: config.app.host,
     port: config.app.port,
     debug: {
-      request: ['error'],
+      request: ["error"],
     },
   });
 
@@ -32,11 +32,12 @@ async function createServer() {
 
   await server.register([
     {
-      plugin: // 7. @TODO registrasikan plugin Jwt.Plugin di sini. Referensi: https://www.dicoding.com/academies/271/tutorials/17711?from=17709
+      // plugin:  // 7. @TODO registrasikan plugin Jwt.Plugin di sini. Referensi: https://www.dicoding.com/academies/271/tutorials/17711?from=17709
+      plugin: Jwt,
     },
   ]);
 
-  server.auth.strategy('songsapp_jwt', 'jwt', {
+  server.auth.strategy("songsapp_jwt", "jwt", {
     keys: config.jwtToken.accessToken.key,
     verify: {
       aud: false,
@@ -87,14 +88,16 @@ async function createServer() {
     },
   ]);
 
-  server.ext('onPreResponse', (request, h) => {
+  server.ext("onPreResponse", (request, h) => {
     const { response } = request;
 
     if (response instanceof ClientError) {
-      return h.response({
-        status: 'fail',
-        message: response.message,
-      }).code(response.statusCode);
+      return h
+        .response({
+          status: "fail",
+          message: response.message,
+        })
+        .code(response.statusCode);
     }
 
     return h.continue;
