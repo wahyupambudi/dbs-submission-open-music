@@ -17,6 +17,7 @@ class LocalStorageService {
       const writable = fs.createWriteStream(filePath);
 
       // @TODO-7: pipe `albumArt` ke `writable`. Referensi: https://www.dicoding.com/academies/271/tutorials/17740
+      albumArt.pipe(writable)
 
       writable.on('finish', () => {
         resolve(filename);

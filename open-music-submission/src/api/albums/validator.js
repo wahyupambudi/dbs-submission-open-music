@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const { InvariantError } = require('../../commons/exceptions');
+const Joi = require("joi");
+const { InvariantError } = require("../../commons/exceptions");
 
 const AlbumsValidator = {
   validatePostAlbumPayload: (payload) => {
@@ -37,10 +37,21 @@ const AlbumsValidator = {
           filename: Joi.string().required(),
           headers: Joi.object({
             // @TODO-6: tambahkan validasi content-type hanya untuk menerima image saja. Referensi: https://www.dicoding.com/academies/271/tutorials/17743
-            'content-type': ,
+            "content-type": Joi.string()
+              .valid(
+                "image/apng",
+                "image/avif",
+                "image/gif",
+                "image/jpeg",
+                "image/png",
+                "image/webp",
+              )
+              .required(),
           }).unknown(),
         }).unknown(),
-      }).unknown().required(),
+      })
+        .unknown()
+        .required(),
     });
 
     const result = scheme.validate(payload);

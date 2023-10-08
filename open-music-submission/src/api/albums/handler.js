@@ -99,6 +99,8 @@ class AlbumsHandler {
 
     // @TODO-8: kembalikan response dengan file yang diambil dari variable `filePath`
     // Referensi: https://www.dicoding.com/academies/271/tutorials/17753
+
+    return h.file(filePath);
   }
 
   async postLikeAlbumByIdHandler(request, h) {

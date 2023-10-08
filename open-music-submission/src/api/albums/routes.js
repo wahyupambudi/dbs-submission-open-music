@@ -34,6 +34,10 @@ const routes = (handler) => [
          *
          * Referensi: https://www.dicoding.com/academies/271/tutorials/17328
          */
+        allow: 'multipart/form-data',
+        multipart: true,
+        output: 'stream',
+        maxBytes: 512000,
       },
     },
   },
