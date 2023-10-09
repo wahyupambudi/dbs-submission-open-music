@@ -5,7 +5,7 @@ const { config } = require("../../commons/config");
 const ProducerService = {
   sendMessage: async (queue, message) => {
     // @TODO-2: buat koneksi ke rabbitmq. Referensi: https://www.dicoding.com/academies/271/tutorials/17629
-    const connection = await amqp.connect(config.rabbitmq.url);
+    const connection = await amqp.connect(config.rabbitMq.url);
     const channel = await connection.createChannel();
     await channel.assertQueue(queue, {
       durable: true,
